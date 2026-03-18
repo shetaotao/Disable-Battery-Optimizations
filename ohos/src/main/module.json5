@@ -1,0 +1,10 @@
+{
+  "module": {
+    "name": "disable_battery_optimization",
+    "type": "har",
+    "deviceTypes": [
+      "default",
+      "tablet"
+    ]
+  }
+}
