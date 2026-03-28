@@ -93,11 +93,11 @@ export default class DisableBatteryOptimizationPlugin implements FlutterPlugin, 
         break;
       // 查询应用是否已加入系统「忽略电池优化」白名单。
       case 'isBatteryOptimizationDisabled':
-        result.success(this.isBatteryOptimizationDisabled());
+        // result.success(this.isBatteryOptimizationDisabled());
         break;
       // 查询用户是否已关闭厂商省电/耗电管理限制。
       case 'isManBatteryOptimizationDisabled':
-        result.success(this.getManBatteryOptimization());
+        // result.success(this.getManBatteryOptimization());
         break;
       // 查询自启动、厂商省电、系统电池优化是否均已处理。
       case 'isAllOptimizationsDisabled':
