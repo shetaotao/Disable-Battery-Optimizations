@@ -9,9 +9,17 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
+  String _result = '';
+
   @override
   void initState() {
     super.initState();
+  }
+
+  void _updateResult(String result) {
+    setState(() {
+      _result = result;
+    });
   }
 
   @override
@@ -29,8 +37,9 @@ class _MyAppState extends State<MyApp> {
                   onPressed: () async {
                     bool isAutoStartEnabled =
                         await DisableBatteryOptimization.isAutoStartEnabled ?? false;
-                    print(
-                        "Auto start is ${isAutoStartEnabled ? "Enabled" : "Disabled"}");
+                    String result = "Auto start is ${isAutoStartEnabled ? "Enabled" : "Disabled"}";
+                    print(result);
+                    _updateResult(result);
                   }),
               MaterialButton(
                   child: Text("Is Battery optimization disabled"),
@@ -56,9 +65,18 @@ class _MyAppState extends State<MyApp> {
                     bool isAllBatteryOptimizationDisabled =
                         await DisableBatteryOptimization
                             .isAllBatteryOptimizationDisabled ?? false;
-                    print(
-                        "All Battery optimizations are disabled ${isAllBatteryOptimizationDisabled ? "True" : "False"}");
+                    String result = "All Battery optimizations are disabled: ${isAllBatteryOptimizationDisabled ? "True" : "False"}";
+                    print(result);
+                    _updateResult(result);
                   }),
+              Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: Text(
+                  _result,
+                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                  textAlign: TextAlign.center,
+                ),
+              ),
               MaterialButton(
                   child: Text("Enable Auto Start"),
                   onPressed: () {
