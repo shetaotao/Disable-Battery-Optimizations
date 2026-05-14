@@ -73,39 +73,57 @@ export default class DisableBatteryOptimizationPlugin implements FlutterPlugin, 
       case 'showEnableAutoStart':
         // this.handleShowEnableAutoStart(call, result);
         // this.openAppSettings("application_info_entry", result);
+        // ohos不支持，直接返回false
+        result.success(false);
         break;
       // 弹出引导用户关闭「厂商省电/耗电管理」的对话框，并跳转到对应设置。
       case 'showDisableManBatteryOptimization':
         // this.handleShowDisableManBatteryOptimization(call, result);
         // this.openSettings("battery", result);
+        // ohos不支持，直接返回false
+        result.success(false);
         break;
       // 请求系统忽略电池优化（跳转电池/应用信息设置页）。
       case 'showDisableBatteryOptimization':
         // this.handleShowDisableBatteryOptimization(result);
+        // ohos不支持，直接返回false
+        result.success(false);
         break;
       // 一次性引导：自启动 → 厂商省电 → 系统忽略电池优化。
       case 'disableAllOptimizations':
         // this.handleDisableAllOptimizations(call, result);
+        // ohos不支持，直接返回false
+        result.success(false);
         break;
       // 查询是否已开启自启动。
       case 'isAutoStartEnabled':
-        result.success(this.isAutoStartEnabled());
+        this.isAutoStartEnabled().then((status: boolean) => {
+          result.success(status);
+        }).catch(() => {
+          result.success(false);
+        });
         break;
       // 查询应用是否已加入系统「忽略电池优化」白名单。
       case 'isBatteryOptimizationDisabled':
+        // ohos不支持，直接返回false
+        result.success(false);
         // result.success(this.isBatteryOptimizationDisabled());
         break;
       // 查询用户是否已关闭厂商省电/耗电管理限制。
       case 'isManBatteryOptimizationDisabled':
+        // ohos不支持，直接返回false
+        result.success(false);
         // result.success(this.getManBatteryOptimization());
         break;
       // 查询自启动、厂商省电、系统电池优化是否均已处理。
       case 'isAllOptimizationsDisabled':
-        result.success(
-          this.getManAutoStart() &&
-          this.isBatteryOptimizationDisabled() &&
-          this.getManBatteryOptimization()
-        );
+        // ohos不支持，直接返回false
+        result.success(false);
+        // result.success(
+        //   this.getManAutoStart() &&
+        //   this.isBatteryOptimizationDisabled() &&
+        //   this.getManBatteryOptimization()
+       // );
         break;
       default:
         result.notImplemented();
@@ -319,22 +337,17 @@ export default class DisableBatteryOptimizationPlugin implements FlutterPlugin, 
   }
 
   // 获取当前应用的开机自启动状态,从API version 21开始支持
-  private isAutoStartEnabled(): boolean {
+  private async isAutoStartEnabled(): Promise<boolean> {
     try {
-      autoStartupManager.getAutoStartupStatusForSelf().then((isAutoStartup: boolean) => {
-        console.info(`getAutoStartupStatusForSelf success, isAutoStartup: ${JSON.stringify(isAutoStartup)}.`);
-        return isAutoStartup;
-      }).catch((err: BusinessError) => {
-        console.error(`getAutoStartupStatusForSelf failed, err code: ${err.code}, err msg: ${err.message}.`);
-        return false;
-      });
+      const isAutoStartup = await autoStartupManager.getAutoStartupStatusForSelf();
+      console.info(`getAutoStartupStatusForSelf success, isAutoStartup: ${JSON.stringify(isAutoStartup)}.`);
+      return isAutoStartup;
     } catch (err) {
-      let code = (err as BusinessError).code;
-      let msg = (err as BusinessError).message;
+      const code = (err as BusinessError).code;
+      const msg = (err as BusinessError).message;
       console.error(`getAutoStartupStatusForSelf failed, err code: ${code}, err msg: ${msg}.`);
       return false;
     }
-    return false;
   }
 
 
